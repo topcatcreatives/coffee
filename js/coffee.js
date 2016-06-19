@@ -17,7 +17,8 @@
 	    path_export = null,
 	    path_import = null,
 	    slider_import = null,
-	    slider_export = null;
+	    slider_export = null,
+	    $coffee_map = $('#coffee-map');
 
 	/*
 		Create reusable coffee slider widget that animate based on the the updated stats of each country.
@@ -204,8 +205,8 @@
 		slider_import = new coffeeSlider("#slider-import", "data/coffee_import.csv", scale_red);
 		slider_export = new coffeeSlider("#slider-export", "data/coffee_export.csv", scale_green);
     
-		var width = $("#coffee-map").width(),
-	    	height = $("#coffee-map").height();
+		var width = $coffee_map.width(),
+	    	height = $coffee_map.height();
 	    
 	    // Tweak size of globe based on the div width
 		if (width > 400) {
@@ -400,11 +401,11 @@
     // Trying to be responsive but not to pretty looking at the moment.
     var coffeeMapResize = function() {
 	
-		var width = $("#coffee-map").width(),
-		    height = $("#coffee-map").height();
+		var width = $coffee_map.width(),
+		    height = $coffee_map.height();
 		    
 		if (width > 400) {
-		    scale = (width * 0.56 ) / Math.PI;
+		    scale = (width * 0.56) / Math.PI;
 		}
 		else {
 		    scale = (width * 1.2) / Math.PI;
