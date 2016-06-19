@@ -1,0 +1,10 @@
+{
+  "name": "coffee",
+  "version": "0.1.0",
+  "dependencies": {
+  },
+  "devDependencies": {
+    "gulp": "^3.7.0",
+    "gulp-connect": "^4.1.0"
+  }
+}

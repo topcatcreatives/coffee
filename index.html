@@ -1,0 +1,85 @@
+<html>
+    <head>
+        <meta charset="utf-8">
+        <meta http-equiv="X-UA-Compatible" content="IE=edge">
+        <meta name="viewport" content="width=device-width, initial-scale=1">
+        <title>Coffee infographics</title>
+
+        <link href="bower_components/bootstrap/dist/css/bootstrap.min.css" rel="stylesheet">            
+        <link href="css/style.css" rel="stylesheet">
+            
+    </head>
+    <body>
+       
+        <div class="container-full">
+            
+            <div class="container-sliders">
+            
+                <h2 id="coffee-country" class="coffee-info"></h2>
+                
+                <div id="exports">
+                    
+                    <h3>
+                        <span class="text-muted">Exports</span>
+                        <span id="exports-bags" class="pull-right"></span>
+                        <br>
+                        <small> bags of coffee beans.</small>
+                    </h3>
+                    
+                    <div id="slider-export" class="slider">
+                        
+                    </div>
+                        
+                </div>
+
+                <hr>
+
+                <div id="imports">
+                    
+                    <h3>
+                        <span class="text-muted">Imports</span>
+                        <span id="imports-bags" class="pull-right"></span>
+                        <br>
+                        <small> bags of coffee beans.</small>    
+                    </h3>
+                    
+                    <div id="slider-import" class="slider">
+                        
+                    </div>
+                    
+                </div>
+
+                <hr>
+
+                <h3>
+                    <span class="text-muted">Drinks</span> <span id="drinks" class="pull-right"></span>
+                    <br>
+                    <small> cups of coffee per capita per day.</small>    
+                </h3>
+            
+                <hr>
+                
+                <small>
+                    Exports and imports in 2012.<br>Bags of coffee beans are 60 kg in weight.<br>Data sourced from <a href="http://www.ico.org/">International Coffee Organisation</a>.
+                </small>
+            </div>
+            
+            <div class="container-description">    
+                <h3>A visualisation about coffee.</h3>
+            </div>
+    
+            <div id="coffee-map">
+                
+            </div>
+
+        </div>
+        
+        <script src="bower_components/jquery/dist/jquery.min.js"></script>
+        <script src="bower_components/bootstrap/dist/js/bootstrap.min.js"></script>
+        <script src="bower_components/d3/d3.js"></script>
+        <script src="bower_components/d3-queue/d3-queue.js"></script>
+        <script src="bower_components/topojson/topojson.js"></script>
+        <script src="js/coffee.js"></script>
+        
+    </body>
+</html>
