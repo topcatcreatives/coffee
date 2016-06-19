@@ -1,6 +1,7 @@
 /*
-	A visualisation on coffee.
-	Used on my site topcat.io. Did it just for fun. Needs a bit more work on the responsivness!
+	A visualisation on coffee imports and exports.
+	Used on my site topcat.io. Did it just for fun. Needs a bit more work on the responsivness
+
 	By Wesley Warner
 */
 
