@@ -131,23 +131,21 @@
     // Update and animate the widget to reflect new import/export statistic
     
     coffeeSlider.prototype.update = function(v) {
-	
-		var that = this;
 		
 		this.svg.select(".slider-line")
 		    .transition()
 		    .duration(this.duration)
-		    .attr("transform", "translate(" + (this.x(v) - that.gutter_side) + ")");
+		    .attr("transform", "translate(" + (this.x(v) - this.gutter_side) + ")");
 		
 		this.svg.select(".slider-arrow-up")
 		    .transition()
 		    .duration(this.duration)
-		    .attr("transform", "translate(" + (this.x(v) - that.gutter_side) + ")");
+		    .attr("transform", "translate(" + (this.x(v) - this.gutter_side) + ")");
 		
 		this.svg.select(".slider-arrow-down")
 		    .transition()
 		    .duration(this.duration)
-		    .attr("transform", "translate(" + (this.x(v) - that.gutter_side) + ")");
+		    .attr("transform", "translate(" + (this.x(v) - this.gutter_side) + ")");
 	
     }
 
@@ -163,34 +161,34 @@
 		this.x.range([this.gutter_side, this.width - this.gutter_side]);
 		this.y.range([this.height - this.gutter_top, this.gutter_bottom]);
 		
-		that.svg
+		this.svg
 		    .style('width', this.width)
 		    .style('height', this.height);
 		    
-		var w = (that.width - (2 * that.gutter_side)) / that.scale_color.length;
+		var w = (this.width - (2 * this.gutter_side)) / this.scale_color.length;
 		    
-		that.svg.selectAll(".block")
+		this.svg.selectAll(".block")
 		    .attr("x", function(d, i) {
 			return (w * i) + that.gutter_side;
 		    })
 		    .attr("y", that.y(1))
 		    .attr("width", w)
-		    .attr("height", that.height - that.gutter_top - that.gutter_bottom);
+		    .attr("height", this.height - this.gutter_top - this.gutter_bottom);
 		
-		that.svg.select(".slider-line")
-		    .attr("x1", that.x(0))
-		    .attr("y1", that.gutter_top)
-		    .attr("x2", that.x(0))
-		    .attr("y2", that.height - that.gutter_bottom);
+		this.svg.select(".slider-line")
+		    .attr("x1", this.x(0))
+		    .attr("y1", this.gutter_top)
+		    .attr("x2", this.x(0))
+		    .attr("y2", this.height - this.gutter_bottom);
 		    
-		that.svg.select(".slider-arrow-up")
+		this.svg.select(".slider-arrow-up")
 			.attr("d", function(d, i) {
 			    var x = that.x(0);
 			    var y = 0;
 			    return "M"+ x +","+ (y + that.gutter_top) +"L"+ (x + 8)+","+ y +"L" + (x - 8)+","+ y + "L" + x +"," + (y + that.gutter_top) + "Z";
 			});
 		
-		that.svg.select(".slider-arrow-down")
+		this.svg.select(".slider-arrow-down")
 			.attr("d", function(d, i) {
 			    var x = that.x(0);
 			    var y = that.height - that.gutter_bottom;
