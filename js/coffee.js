@@ -442,5 +442,10 @@
 
     // Start the visualisation
     coffeeMap();
+
+    // Watch for window resize and update the visualisation sizes
+    $(window).resize(function() {
+    	coffeeMapResize();
+    });
     
 })(jQuery);
