@@ -1,6 +1,6 @@
 /*
 	A visualisation on coffee imports and exports.
-	Used on my site topcat.io. Did it just for fun. Needs a bit more work on the responsivness
+	Used on my site topcat.io. Did it just for fun.
 
 	By Wesley Warner
 */
@@ -19,18 +19,23 @@
 	    slider_import = null,
 	    slider_export = null,
 	    $coffee_map = $('#coffee-map'),
-	    mobile_width = 480;
+	    mobile_width = 480,
+	    desktop_width = 1200;
     
     var coffeeMap = function() {
 	
     	var width = $coffee_map.width(),
-	    	height = $coffee_map.height(),
+	    	height = null,
 	    	number_format = d3.format("0,000"),
 			duration = 4000;
 	    	coffee_export_by_name = d3.map(),
 			coffee_import_by_name = d3.map(),
 			coffee_drunk_by_name = d3.map(),
 			q = d3.queue();
+
+		$coffee_map.css('height', width * 0.6);
+
+		height = $coffee_map.height();
 
 		// Create import and export statistic widgets
 		slider_import = new coffeeSlider("#slider-import", "data/coffee_import.csv", scale_red);
@@ -213,11 +218,14 @@
 		}
     }
     
-    // Trying to be responsive but not to pretty looking at the moment.
     var coffeeMapResize = function() {
-	
+
 		var width = $coffee_map.width(),
-		    height = $coffee_map.height();
+		    height = null;
+
+		$coffee_map.css('height', width * 0.6);
+
+		height = $coffee_map.height();
 		    
 		scale = globeScale(width);
 		
@@ -252,17 +260,7 @@
     };
 
     function globeScale(width) {
-    	
-    	// This needs some work to handle the different breakpoints
-
-    	if (width > mobile_width) {
-		    scale = (width * 0.56) / Math.PI;
-		}
-		else {
-		    scale = (width * 1.2) / Math.PI;
-		}
-
-    	return scale;
+    	return width * 0.85 / Math.PI;;
     }
 
     // Start the visualisation
