@@ -18,9 +18,7 @@
 	    path_import = null,
 	    slider_import = null,
 	    slider_export = null,
-	    $coffee_map = $('#coffee-map'),
-	    mobile_width = 480,
-	    desktop_width = 1200;
+	    $coffee_map = $('#coffee-map');
     
     var coffeeMap = function() {
 	
@@ -260,7 +258,7 @@
     };
 
     function globeScale(width) {
-    	return width * 0.85 / Math.PI;;
+    	return width * 0.85 / Math.PI;
     }
 
     // Start the visualisation
