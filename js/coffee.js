@@ -18,223 +18,42 @@
 	    path_import = null,
 	    slider_import = null,
 	    slider_export = null,
-	    $coffee_map = $('#coffee-map');
-
-	/*
-		Create reusable coffee slider widget that animate based on the the updated stats of each country.
-		Needed for both import and export on custom colour scale.
-	*/
-
-    var coffeeSlider = function(el, data_src, scale_color) {
-	
-		this.el = el,
-	    this.$el = $(el),
-	    this.width = this.$el.width(),
-	    this.height = this.$el.height(),
-	    this.data_src = data_src,
-	    this.scale_color = scale_color,
-	    this.duration = 4000,
-	    this.gutter_top = 8,
-	    this.gutter_bottom = 8
-	    this.gutter_side = 8;
-	
-		this.init();
-    }
-    
-  	// Initialise coffee slider component
-
-    coffeeSlider.prototype.init = function() {
-	
-		var that = this;
-	
-		// Initialise svg component
-		this.svg = d3.select(this.el).append("svg")
-	    	.attr("width", this.width)
-	    	.attr("height", this.height);
-	    
-	    // Scale variables
-		this.x = d3.scale.linear()
-	    	.range([this.gutter_side, this.width - this.gutter_side]);
-    
-		this.y = d3.scale.linear()
-	    	.range([this.height - this.gutter_top, this.gutter_bottom]);
-    
-    	// Import data from local csv files
-		d3.csv(this.data_src, function(error, data) {
-	    	
-	    	// Ensure consistent data format
-	    	data.forEach(function(d) {
-				d.value = 1;
-				d.bags = +d.bags;
-	    	});
-	    
-	    	// Find max value for scale
-	    	var max_val = d3.max(data, function(d) { return d.bags; });
-	    
-		    that.x.domain([0, max_val]);
-		    that.y.domain([0, 1]);
-		    
-		    var w = (that.width - (2 * that.gutter_side)) / that.scale_color.length;
-		    
-		    // Draw colour scale blocks
-		    that.svg.selectAll(".blocks")
-				.data(that.scale_color)
-				.enter()
-				.append("rect")
-				.attr("class", "block")
-				.attr("x", function(d, i) {
-		    		return (w * i) + that.gutter_side;
-				})
-				.attr("y", that.y(1))
-				.attr("width", w)
-				.attr("height", that.height - that.gutter_top - that.gutter_bottom)
-				.style("fill", function(d) {
-					return d;
-				});
-	    
-	    	// Draw marker line
-	    	that.svg.append("line")
-				.attr("class", "slider-line")
-				.attr("x1", that.x(0))
-				.attr("y1", that.gutter_top)
-				.attr("x2", that.x(0))
-				.attr("y2", that.height - that.gutter_bottom)
-				.style("stroke", "#aaa")
-				.style("stroke-width", 1);
-		
-			// Draw bottom arrow
-	    	that.svg.append("path")
-		    	.attr("class", "slider-arrow-up")
-		    	.style("fill", "#aaa")
-		    	.attr("d", function(d, i) {
-					var x = that.x(0),
-						y = 0;
-
-					return "M"+ x +","+ (y + that.gutter_top) +"L"+ (x + 8)+","+ y +"L" + (x - 8)+","+ y + "L" + x +"," + (y + that.gutter_top) + "Z";
-		    	});
-	    
-	    	// Draw top arrow
-	    	that.svg.append("path")
-		    	.attr("class", "slider-arrow-down")
-		    	.style("fill", "#aaa")
-		    	.attr("d", function(d, i) {
-					var x = that.x(0),
-						y = that.height - that.gutter_bottom;
-
-					return "M"+ x +","+ (y) +"L"+ (x + 8)+","+ (y + that.gutter_bottom) +"L" + (x - 8)+","+ (y + that.gutter_bottom) + "L" + x +"," + (y) + "Z";
-		    	});
-	    
-		});
-	
-    };
-    
-    // Update and animate the widget to reflect new import/export statistic
-    
-    coffeeSlider.prototype.update = function(v) {
-		
-		this.svg.select(".slider-line")
-		    .transition()
-		    .duration(this.duration)
-		    .attr("transform", "translate(" + (this.x(v) - this.gutter_side) + ")");
-		
-		this.svg.select(".slider-arrow-up")
-		    .transition()
-		    .duration(this.duration)
-		    .attr("transform", "translate(" + (this.x(v) - this.gutter_side) + ")");
-		
-		this.svg.select(".slider-arrow-down")
-		    .transition()
-		    .duration(this.duration)
-		    .attr("transform", "translate(" + (this.x(v) - this.gutter_side) + ")");
-	
-    }
-
-    // Resize coffee slider widget on window resize
-    
-    coffeeSlider.prototype.resize = function() {
-	
-		var that = this;
-		
-		this.width = this.$el.width();
-		this.height = this.$el.height();
-		
-		this.x.range([this.gutter_side, this.width - this.gutter_side]);
-		this.y.range([this.height - this.gutter_top, this.gutter_bottom]);
-		
-		this.svg
-		    .style('width', this.width)
-		    .style('height', this.height);
-		    
-		var w = (this.width - (2 * this.gutter_side)) / this.scale_color.length;
-		    
-		this.svg.selectAll(".block")
-		    .attr("x", function(d, i) {
-			return (w * i) + that.gutter_side;
-		    })
-		    .attr("y", that.y(1))
-		    .attr("width", w)
-		    .attr("height", this.height - this.gutter_top - this.gutter_bottom);
-		
-		this.svg.select(".slider-line")
-		    .attr("x1", this.x(0))
-		    .attr("y1", this.gutter_top)
-		    .attr("x2", this.x(0))
-		    .attr("y2", this.height - this.gutter_bottom);
-		    
-		this.svg.select(".slider-arrow-up")
-			.attr("d", function(d, i) {
-			    var x = that.x(0);
-			    var y = 0;
-			    return "M"+ x +","+ (y + that.gutter_top) +"L"+ (x + 8)+","+ y +"L" + (x - 8)+","+ y + "L" + x +"," + (y + that.gutter_top) + "Z";
-			});
-		
-		this.svg.select(".slider-arrow-down")
-			.attr("d", function(d, i) {
-			    var x = that.x(0);
-			    var y = that.height - that.gutter_bottom;
-			    return "M"+ x +","+ (y) +"L"+ (x + 8)+","+ (y + that.gutter_bottom) +"L" + (x - 8)+","+ (y + that.gutter_bottom) + "L" + x +"," + (y) + "Z";
-			});
-    
-    };
+	    $coffee_map = $('#coffee-map'),
+	    mobile_width = 480;
     
     var coffeeMap = function() {
 	
-		// Create import and export statistic widgets
-		slider_import = new coffeeSlider("#slider-import", "data/coffee_import.csv", scale_red);
-		slider_export = new coffeeSlider("#slider-export", "data/coffee_export.csv", scale_green);
-    
-		var width = $coffee_map.width(),
-	    	height = $coffee_map.height();
-	    
-	    // Tweak size of globe based on the div width
-		if (width > 400) {
-	    	scale = (width * 0.56 ) / Math.PI;
-		}
-		else {
-	    	scale = (width * 1.2) / Math.PI;
-		}
-	
-		var number_format = d3.format("0,000"),
+    	var width = $coffee_map.width(),
+	    	height = $coffee_map.height(),
+	    	number_format = d3.format("0,000"),
 			duration = 4000;
 	    	coffee_export_by_name = d3.map(),
 			coffee_import_by_name = d3.map(),
-			coffee_drunk_by_name = d3.map();
+			coffee_drunk_by_name = d3.map(),
+			q = d3.queue();
+
+		// Create import and export statistic widgets
+		slider_import = new coffeeSlider("#slider-import", "data/coffee_import.csv", scale_red);
+		slider_export = new coffeeSlider("#slider-export", "data/coffee_export.csv", scale_green);
+	    
+	    // Tweak size of globe based on the div width
+		scale = globeScale(width);
     
 		projection = d3.geo.orthographic()
 		    .translate([width / 2, height / 2])
 		    .scale(scale)
 		    .clipAngle(90);
 	
-		var path_water = d3.geo.path()
+		path_water = d3.geo.path()
 	    	.projection(projection);
 	
-		var path_land = d3.geo.path()
+		path_land = d3.geo.path()
 	    	.projection(projection);
 	
-		var path_export = d3.geo.path()
+		path_export = d3.geo.path()
 	    	.projection(projection);
 	    
-		var path_import = d3.geo.path()
+		path_import = d3.geo.path()
 	    	.projection(projection);
 	
 		// Initialise svg for globe
@@ -250,8 +69,6 @@
 		    .attr("height", height);
 	
 		// Ensure all data sources successfully load before going any further
-		var q = d3.queue();
-		
 		q.defer(d3.json, "data/world.json")
 		    .defer(d3.csv, "data/coffee_export.csv", function(d) { coffee_export_by_name.set(d.country, +d.bags); })
 		    .defer(d3.csv, "data/coffee_import.csv", function(d) { coffee_import_by_name.set(d.country, +d.bags); })
@@ -321,7 +138,7 @@
 				})
 				.attr("d", path_export);
 		   
-		   // Draw all the imports on to the map using the red colour scale
+		   	// Draw all the imports on to the map using the red colour scale
 	    	var imports = svg.append("g")
 				.attr("class", "imports");
 		
@@ -402,12 +219,7 @@
 		var width = $coffee_map.width(),
 		    height = $coffee_map.height();
 		    
-		if (width > 400) {
-		    scale = (width * 0.56) / Math.PI;
-		}
-		else {
-		    scale = (width * 1.2) / Math.PI;
-		}
+		scale = globeScale(width);
 		
 		// update projection
 		projection.translate([width / 2, height / 2])
@@ -438,6 +250,20 @@
 		slider_import.resize();
 		slider_export.resize();
     };
+
+    function globeScale(width) {
+    	
+    	// This needs some work to handle the different breakpoints
+
+    	if (width > mobile_width) {
+		    scale = (width * 0.56) / Math.PI;
+		}
+		else {
+		    scale = (width * 1.2) / Math.PI;
+		}
+
+    	return scale;
+    }
 
     // Start the visualisation
     coffeeMap();
